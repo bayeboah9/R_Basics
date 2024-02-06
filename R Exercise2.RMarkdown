@@ -1,0 +1,126 @@
+---
+title: "R Exercise 2"
+author: "Nana Akua"
+date: "2024-01-30"
+output: html_document
+---
+# Installing packages
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+# Loading the dplyr and ggplot 2 packages 
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+# Extracting the dataset
+```{r}
+D0 <- read.csv("Tips.csv")
+View(D0)
+```
+
+#Using str() and summary for data inspection
+```{r}
+str(D0)
+summary(D0)
+```
+
+# Showing the number of rows and columns 
+```{r}
+num_of_row <- nrow(D0)
+num_of_col <- ncol(D0)
+
+print(num_of_row)
+print(num_of_col)
+```
+
+#Checking for missing values 
+```{r}
+missing_values <- is.na(D0)
+missing_values1<- sum(is.na(D0))
+print(missing_values1)
+```
+
+#Getting the cleaned data
+```{r}
+D1 <- na.omit(D0)
+print(D1)
+View(D1)
+
+str(D1)
+summary(D1)
+
+```
+
+#Subset/Filtering dinner from time column
+```{r}
+D2 <- D1 %>% 
+  filter(time == 'Dinner')
+View(D2)
+```
+
+#Removing the data set D2 using rm()
+```{r}
+rm(D2)
+```
+
+#Data Visualization 
+###Plotting a histogram for the total_bill from D1
+```{r}
+ggplot(D1) + geom_histogram(mapping = aes(x=total_bill, 'fill'= time))+ 
+  labs(title = "Histogram showing total bill at different times", caption = 'Data visualized by Akua')
+```
+
+#Histogram for females
+```{r}
+D2 <- D1 %>% 
+  filter(sex == "Female")
+View (D2)
+
+ggplot(D2) + geom_histogram(mapping = aes(x = total_bill,'fill' = sex), bins = 50)+
+  labs(title = "Histogram showing females",caption = 'Data viz by Akua' ) 
+
+hist(D1$total_bill, xlab = 'total_bill', ylab = 'Frequency')
+```
+
+# Creating a box plot for tip in D1
+```{r}
+ggplot(D1) + geom_boxplot(mapping = aes(x = tip)) + 
+  labs(title = 'Box plot for tip data', caption = "Data viz by Akua")
+```
+
+# Correlation 
+## Finding the mean and the variance for total_bill
+```{r}
+Mean <- mean(D1$total_bill)
+print(Mean)
+
+Variance <- var(D1$total_bill)
+print(Variance)
+
+```
+
+#Removing the first correlation columns I created
+```{r}
+select(D1, -Mean) 
+select(D1, -Variance)
+```
+
+#Calculating the correlation between tip and total_bill
+```{r}
+Correlation_value <- cor(D1$total_bill,D1$tip)
+print (Correlation_value)
+```
+
+# Drawing a line plot between total_bill and tip
+```{r}
+D2 <- D1[order(D1$total_bill), ]
+
+plot(D2$total_bill,D2$tip,type = "l", xlab = 'total_bill', ylab = 'tip')  
+```
+
+
+
